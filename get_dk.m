@@ -1,4 +1,4 @@
-function [dx,dy] = get_dk(im, thresh)
+function [dx,dy] = get_dk(im)
     
     im=im2double(im);
     im = rgb2gray(im);
@@ -9,7 +9,7 @@ function [dx,dy] = get_dk(im, thresh)
     laplacianImage = imfilter((im), laplacianKernel); 
     
     %compute the 2D autocorrelation map of the laplacian
-    auto = xcorr2(laplacianImage);  
+    auto = xcorr2(laplacianImage);
     [m,n] = size(auto);
     ori_x = floor(m/2)+1;
     ori_y = floor(n/2)+1;
@@ -33,29 +33,24 @@ function [dx,dy] = get_dk(im, thresh)
     %remove local maxima within 4 pixels of the origin
     max_1(ori_x-4 : ori_x+4 , ori_y-4 : ori_y+4) = 0;
     max_2(ori_x-4 : ori_x+4 , ori_y-4 : ori_y+4) = 0;
-
+    
+    
+    %setting the appropriate threshold value
+    diff = max_1 - max_2;
+    [mindiff,i1] = min(diff(:));
+    [maxdiff,i2] = max(diff(:)); 
+    thresh = (maxdiff-mindiff)/2;   
     
     max_indices = find(max_1==auto & ((max_1 - max_2) > thresh));
     max_vals = max_1(max_indices);
 
     
+    [gl_max, ind]=max(max_vals);
+    [dy,dx] = ind2sub([m,n],max_indices(ind));
+   
     
-    maxima = -1;
-    dx = 0; 
-    dy = 0;
-
-    for i = 1 : length(max_indices)
-        if (max_vals(i) > maxima)              
-                %consider coordinate axes
-                [y, x] = ind2sub([m,n], max_indices(i)); 
-                dy = y;
-                dx = x;
-                maxima = max_vals(i);
-        end
-    end
-    
-    dx
-    dy
+    max_1(max_indices(ind))
+    max_2(max_indices(ind))
     
     %origin shift for the coordinates
     dx = abs (dx - ori_y);
