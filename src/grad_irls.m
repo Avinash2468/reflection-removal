@@ -15,7 +15,7 @@ function [I_t, I_r]=grad_irls(I_in, k_mat)
   configs.non_negative = true;
   
   mk = k_mat;
-%   mh = inv(mk);
+ mh = inv(mk);
 
   mx = get_fx(h, w);
   my = get_fy(h, w);
