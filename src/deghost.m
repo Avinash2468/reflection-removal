@@ -8,11 +8,17 @@ I = im2double(imread(image_path));
 % size of the image
 [h w channels] = size(I);
 
+if channels>1
+	I_gray = rgb2gray(I)
+else
+	I_gray = I
+end
+
 % spatial shift 
-[dx dy] = get_dk(I);
+[dx dy] = get_dk(I_gray);
 
 % attenuation factor
-c = estimate_ck(I, dx, dy);
+c = estimate_ck(I_gray, dx, dy);
 
 % ghosting kernel
 k = construct_kernel(h, w, dx, dy, c);
