@@ -33,8 +33,8 @@ function [I_t, I_r ] = patch_gmm(I_in, k_mat)
     fprintf('Optimization iteration : %d...\n', i);
 
     % Merge the patches with bounded least squares
-    t_merge = merge_patches(ones(psize^2, num_patches), h, w, psize);
-    r_merge = merge_patches(ones(psize^2, num_patches), h, w, psize);
+    t_merge = merge_patches(est_t, h, w, psize);
+    r_merge = merge_patches(est_r, h, w, psize);
     sum_piT_zi = cat(1, t_merge(:), r_merge(:));
     z = lambda * transpose(A) * I_in(:) + beta * sum_piT_zi;
 
