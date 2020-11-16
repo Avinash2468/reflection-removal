@@ -28,25 +28,24 @@ for i = 1:rows % iterating through the corners
       slice1 = slice1(:); % converting to a row vector for further processing
       
        % Contrast normalization of the patch
-       slice = contrast_normalize(slice);
-       slice1 = contrast_normalize(slice1);
+%        slice = contrast_normalize(slice);
+%        slice1 = contrast_normalize(slice1);
        
       slice=slice-mean(slice);
       slice1=slice1-mean(slice1); % normalising the mean
 
-%        a(i)=(max(slice1)-min(slice1))/(max(slice)-min(slice));
-        a(i) = sqrt(var(slice1)/var(slice));
+        a(i)=(max(slice1)-min(slice1))/(max(slice)-min(slice));
+%         a(i) = sqrt(var(slice1)/var(slice));
       
       if (a(i) <1) && ( a(i) > 0)
-%           temp = sum(slice.*slice1)/sum(slice.^2).^0.5/sum(slice1.^2).^0.5;
-          temp  = (norm(slice-slice1))^2;
+          temp = sum(slice.*slice1)/sum(slice.^2).^0.5/sum(slice1.^2).^0.5;
+%           temp  = (norm(slice-slice1))^2;
         w(i) = exp(-temp/(2*0.2^2));
       end
-    end
-    
-    c = sum(w.*a) / sum(w);
-end
+    end  
+  end
 
+ c = sum(w.*a) / sum(w);
 fprintf("ck val is %d\n", c)
 end
 

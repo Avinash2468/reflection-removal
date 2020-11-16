@@ -1,4 +1,4 @@
-function deghost(image_path, diagonal_shift, thresh)
+function deghost(image_path, diagonal_shift, thresh, label)
   addpath('epllcode');
   addpath('lbfgsb')
   addpath('lbfgsb/lbfgsb3.0_mex1.2');
@@ -30,7 +30,7 @@ for i = 1:channels
 %     [I_t(:,:,i), I_r(:,:,i)] = enhance_channel(I_t(:,:,i), I_r(:,:,i), 10, I(:,:,i));
 end
 
-  imwrite(I, char(strcat('t','_input.png')));
-  imwrite(I_t, char(strcat('t','_transmission.png')));
-  imwrite(I_r, char(strcat('t','_reflection.png')));
+  imwrite(I, char(strcat(label,'_input.png')));
+  imwrite(I_t, char(strcat(label,'_transmission.png')));
+  imwrite(I_r, char(strcat(label,'_reflection.png')));
 end
