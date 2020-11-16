@@ -40,6 +40,8 @@ for i = 1:rows % iterating through the corners
     
     c = sum(w.*a) / sum(w);
 end
+
+fprintf("ck val is %d\n", c)
 end
 
 function slice = retrieve_patch(img,center_x,center_y,width)

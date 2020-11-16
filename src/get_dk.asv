@@ -1,4 +1,4 @@
-function [dx,dy] = get_dk(input_im, diagonal_shift)
+function [dx,dy] = get_dk(input_im)
     
      im=im2double(input_im);
 %     im = rgb2gray(im);
@@ -34,14 +34,6 @@ function [dx,dy] = get_dk(input_im, diagonal_shift)
     max_1(ori_x-4 : ori_x+4 , ori_y-4 : ori_y+4) = 0;
     max_2(ori_x-4 : ori_x+4 , ori_y-4 : ori_y+4) = 0;
     
-    %eliminating vertical and horizontal shifts if it is known to be a
-    %diagonal shift
-    if diagonal_shift == 1
-        max_1(ori_x , :) = 0;
-        max_1(: , ori_y) = 0;
-        max_2(ori_x , :) = 0;
-        max_2(: , ori_y) = 0;
-    end
     
     %setting the appropriate threshold value
     diff = max_1 - max_2;
@@ -49,7 +41,7 @@ function [dx,dy] = get_dk(input_im, diagonal_shift)
     [maxdiff,i2] = max(diff(:));
    
     thresh = (maxdiff-mindiff)/3;
-    
+    thresh = 0;
     fprintf("Threshold used is %d\n\n", thresh)
     
     max_indices = find(max_1==auto & ((max_1 - max_2) > thresh));
@@ -59,7 +51,7 @@ function [dx,dy] = get_dk(input_im, diagonal_shift)
     for i = 1 : length(max_indices)
           [dy, dx] = ind2sub([m,n], max_indices(i)); 
           a = (dy - ori_x);
-          b = (ori_y - dx);
+          b = (dx - ori_y);
           fprintf("%d\t%d\t%d\t%d\t%d\t%d\n",dx,dy,b,a,max_vals(i),max_vals_2(i));
     end
     
@@ -71,7 +63,7 @@ function [dx,dy] = get_dk(input_im, diagonal_shift)
     max_2(max_indices(ind));
     
     %origin shift for the coordinates
-    dx =  abs ((ori_y - dx));
+    dx =  abs ((dx - ori_y));
     dy =  abs ((dy - ori_x));
     
     fprintf("Estimation of dk values are\n")

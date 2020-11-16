@@ -1,4 +1,4 @@
-function deghost(image_path)
+function deghost(image_path, diagonal_shift)
   addpath('epllcode');
   addpath('lbfgsb')
   addpath('lbfgsb/lbfgsb3.0_mex1.2');
@@ -9,13 +9,13 @@ I = im2double(imread(image_path));
 [h w channels] = size(I);
 
 if channels>1
-	I_gray = rgb2gray(I)
+	I_gray = rgb2gray(I);
 else
-	I_gray = I
+	I_gray = I;
 end
 
 % spatial shift 
-[dx dy] = get_dk(I_gray);
+[dx dy] = get_dk(I_gray, diagonal_shift);
 
 % attenuation factor
 c = estimate_ck(I_gray, dx, dy);

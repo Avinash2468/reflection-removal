@@ -31,10 +31,10 @@ function [I_t, I_r]=grad_irls(I_in, k_mat)
 
   out_x = irls_grad(I_x, [], out_xi, mh, configs, mx, my,  mu, mv, mlap);
 %   outr_x = reshape(mh*(I_x(:)-out_x(:)), configs.dims);
-  outr_x = reshape(mk\(I_x(:)-out_x(:)), configs.dims);
+  outr_x = reshape(mh*(I_x(:)-out_x(:)), configs.dims);
   
   out_y = irls_grad(I_y, [], out_yi, mh, configs, mx, my, mu, mv, mlap);
-  outr_y = reshape(mk\(I_y(:)-out_y(:)), configs.dims);
+  outr_y = reshape(mh*(I_y(:)-out_y(:)), configs.dims);
 
   I_t = Integration2D(out_x, out_y, I_in);
   I_r = Integration2D(outr_x, outr_y, I_in);
