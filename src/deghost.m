@@ -1,4 +1,4 @@
-function deghost(image_path, diagonal_shift)
+function deghost(image_path, diagonal_shift, thresh)
   addpath('epllcode');
   addpath('lbfgsb')
   addpath('lbfgsb/lbfgsb3.0_mex1.2');
@@ -15,7 +15,7 @@ else
 end
 
 % spatial shift 
-[dx dy] = get_dk(I_gray, diagonal_shift);
+[dx dy] = get_dk(I_gray, diagonal_shift, thresh);
 
 % attenuation factor
 c = estimate_ck(I_gray, dx, dy);
@@ -27,7 +27,7 @@ for i = 1:channels
     fprintf("For channel ",i)
     % apply optimization to each channel 
     [I_t(:,:,i), I_r(:,:,i)] = patch_gmm(I(:,:,i), k);
-
+%     [I_t(:,:,i), I_r(:,:,i)] = enhance_channel(I_t(:,:,i), I_r(:,:,i), 10, I(:,:,i));
 end
 
   imwrite(I, char(strcat('t','_input.png')));

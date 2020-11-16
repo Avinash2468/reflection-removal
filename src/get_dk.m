@@ -1,4 +1,4 @@
-function [dx,dy] = get_dk(input_im, diagonal_shift)
+function [dx,dy] = get_dk(input_im, diagonal_shift, thresh)
     
      im=im2double(input_im);
 %     im = rgb2gray(im);
@@ -14,21 +14,21 @@ function [dx,dy] = get_dk(input_im, diagonal_shift)
     ori_x = floor(m/2)+1;
     ori_y = floor(n/2)+1;
         
+   
     
     %view autocorrelation map
-     
-     auto2 = uint8(255 * mat2gray(auto));   
-     x=[-floor(m/2)+1 floor(m/2)+1]; y=[-floor(n/2)+1 floor(n/2)+1];
-     imagesc(x,y,auto2);
-     imshow(auto2)
-     axis on
+%      
+%      auto2 = uint8(255 * mat2gray(auto));   
+%      x=[-floor(m/2)+1 floor(m/2)+1]; y=[-floor(n/2)+1 floor(n/2)+1];
+%      imagesc(x,y,auto2);
+%      imshow(auto2)
+%      axis on
     
     
     %compute local maxima in 5x5 patch
     %first and second local minima
     max_1 = ordfilt2(auto, 25, true(5,5));
     max_2 = ordfilt2(auto, 24, true(5,5));
-
     
     %remove local maxima within 4 pixels of the origin
     max_1(ori_x-4 : ori_x+4 , ori_y-4 : ori_y+4) = 0;
@@ -43,29 +43,32 @@ function [dx,dy] = get_dk(input_im, diagonal_shift)
         max_2(: , ori_y) = 0;
     end
     
-    %setting the appropriate threshold value
-    diff = max_1 - max_2;
-    [mindiff,i1] = min(diff(:));
-    [maxdiff,i2] = max(diff(:));
-   
-    thresh = (maxdiff-mindiff)/3;
+    %keeping a limit on the shifts
+    max_1 = black_out(max_1, m, n);
+    max_2 = black_out(max_2, m, n);
     
+    %setting the appropriate threshold value
+%     diff = max_1 - max_2;
+%     [mindiff,i1] = min(diff(:));
+%     [maxdiff,i2] = max(diff(:));
+    
+%     thresh = (maxdiff-mindiff)/3;
     fprintf("Threshold used is %d\n\n", thresh)
     
     max_indices = find(max_1==auto & ((max_1 - max_2) > thresh));
     max_vals = max_1(max_indices);
-    max_vals_2 = max_2(max_indices)
+    max_vals_2 = max_2(max_indices);
     
-    for i = 1 : length(max_indices)
-          [dy, dx] = ind2sub([m,n], max_indices(i)); 
-          a = (dy - ori_x);
-          b = (ori_y - dx);
-          fprintf("%d\t%d\t%d\t%d\t%d\t%d\n",dx,dy,b,a,max_vals(i),max_vals_2(i));
-    end
+%     for i = 1 : length(max_indices)
+%           [dy, dx] = ind2sub([m,n], max_indices(i)); 
+%           a = (dy - ori_x);
+%           b = (ori_y - dx);
+%           fprintf("%d\t%d\t%d\t%d\t%d\t%d\n",dx,dy,b,a,max_vals(i),max_vals_2(i));
+%     end
     
     [gl_max, ind]=max(max_vals);
+    
     [dy,dx] = ind2sub([m,n],max_indices(ind));
-   
     
     max_1(max_indices(ind));
     max_2(max_indices(ind));
@@ -78,4 +81,10 @@ function [dx,dy] = get_dk(input_im, diagonal_shift)
     fprintf("\tdx = %d \n\tdy = %d\n", dx, dy)
     
 end
-    
+
+function [auto] =  black_out(auto, m, n)
+    auto(1:floor(m/4),:) = 0;
+    auto(floor(3*m/4):m,:) = 0;
+    auto(:,1:floor(n/4)) = 0;
+    auto(:,floor(3*n/4):n) = 0;
+end
