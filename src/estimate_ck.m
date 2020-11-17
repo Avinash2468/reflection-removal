@@ -1,4 +1,4 @@
-function c = estimate_ck(input_img,dx,dy)
+function c = estimate_ck(input_img,dx,dy,thresh)
     % img = im2double(imread(img_path));  
     % img = rgb2gray(input_img);
     img = input_img;
@@ -44,7 +44,7 @@ function c = estimate_ck(input_img,dx,dy)
             
 
 
-            if abs(slice_corr) < 0.7
+            if abs(slice_corr) < thresh
                 a(i)=0;
                 w(i)=0;
                 

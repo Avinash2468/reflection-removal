@@ -1,4 +1,4 @@
-function deghost(image_path, diagonal_shift, thresh, label)
+function deghost(image_path, signx, signy, dk_thresh, ck_thresh, label)
   addpath('epllcode');
   addpath('lbfgsb')
   addpath('lbfgsb/lbfgsb3.0_mex1.2');
@@ -15,10 +15,10 @@ else
 end
 
 % spatial shift 
-[dx dy] = get_dk(I_gray, diagonal_shift, thresh);
+[dx dy] = get_dk(I_gray, signx, signy, dk_thresh);
 
 % attenuation factor
-c = estimate_ck(I_gray, dx, dy);
+c = estimate_ck(I_gray, dx, dy, ck_thresh);
 
 % ghosting kernel
 k = construct_kernel(h, w, dx, dy, c);
