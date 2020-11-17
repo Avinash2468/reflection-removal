@@ -44,7 +44,7 @@ function c = estimate_ck(input_img,dx,dy)
             
 
 
-            if abs(slice_corr) < 0.7
+            if abs(slice_corr) < 0.
                 a(i)=0;
                 w(i)=0;
                 
@@ -72,8 +72,8 @@ function c = estimate_ck(input_img,dx,dy)
 %             end
         end
     end
-%     w 
-%     a
+    w 
+    a
     c = sum(w.*a) / sum(w);
     fprintf("ck val is %d\n", c)
 end

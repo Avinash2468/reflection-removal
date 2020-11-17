@@ -1,4 +1,4 @@
-function [dx,dy] = get_dk(input_im, diagonal_shift, thresh)
+function [dx,dy] = get_dk(input_im, signx, signy, thresh)
     
      im=im2double(input_im);
 %     im = rgb2gray(im);
@@ -17,7 +17,7 @@ function [dx,dy] = get_dk(input_im, diagonal_shift, thresh)
    
     
     %view autocorrelation map
-%      
+      
 %      auto2 = uint8(255 * mat2gray(auto));   
 %      x=[-floor(m/2)+1 floor(m/2)+1]; y=[-floor(n/2)+1 floor(n/2)+1];
 %      imagesc(x,y,auto2);
@@ -36,7 +36,7 @@ function [dx,dy] = get_dk(input_im, diagonal_shift, thresh)
     
     %eliminating vertical and horizontal shifts if it is known to be a
     %diagonal shift
-    if diagonal_shift == 1
+    if signx ~=0 && signy ~=0
         max_1(ori_x , :) = 0;
         max_1(: , ori_y) = 0;
         max_2(ori_x , :) = 0;
@@ -62,7 +62,7 @@ function [dx,dy] = get_dk(input_im, diagonal_shift, thresh)
 %     for i = 1 : length(max_indices)
 %           [dy, dx] = ind2sub([m,n], max_indices(i)); 
 %           a = (dy - ori_x);
-%           b = (ori_y - dx);
+%           b = (dx - ori_y);
 %           fprintf("%d\t%d\t%d\t%d\t%d\t%d\n",dx,dy,b,a,max_vals(i),max_vals_2(i));
 %     end
     
@@ -74,8 +74,37 @@ function [dx,dy] = get_dk(input_im, diagonal_shift, thresh)
     max_2(max_indices(ind));
     
     %origin shift for the coordinates
-    dx =  abs ((ori_y - dx));
-    dy =  abs ((dy - ori_x));
+    dx =   ((dx - ori_y));
+    dy =   ((dy - ori_x));
+    
+    dx
+    dy
+    if signx == 0 && signy == 0
+        %do nothing
+        
+    elseif (signx == 0)
+        if (dy*signy < 0)
+            fprintf("I am here\n")
+            dy = dy*(-1);
+            dx = dx*(-1);
+        end
+    
+    elseif (signy == 0)
+        if(dx*signx < 0)
+            dy = dy*(-1);
+            dx = dx*(-1);
+        end
+    elseif (dy*signy < 0 && dx*signx < 0 )
+        dy = dy*(-1);
+        dx = dx*(-1);
+        
+    elseif (dy*signy > 0 && dx*signx > 0)
+        %do nothing
+        
+    else
+        fprintf("Your signs do not agree with the direction of shift detected\n")
+        fprintf("Ouputs may be flawed\nPlease recheck the signs\n")
+    end
     
     fprintf("Estimation of dk values are\n")
     fprintf("\tdx = %d \n\tdy = %d\n", dx, dy)
