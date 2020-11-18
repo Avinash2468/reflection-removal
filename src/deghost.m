@@ -1,4 +1,4 @@
-function deghost(image_path, signx, signy, dk_thresh, ck_thresh)
+function deghost(image_path, label_x, label_y, dk_thresh, ck_thresh)
   addpath('epllcode'); % Dependency on Patch-GMM prior
   addpath('lbfgsb'); 
   addpath('lbfgsb/lbfgsb3.0_mex1.2'); % Dependency on bounded-LBFGS Optimization 
@@ -8,6 +8,24 @@ I = im2double(imread(image_path));
 % size of the image
 [h, w, channels] = size(I);
 
+%getting the appropriate signs for dx and dy from user input
+if strcmpi(label_x,"l") == 1 
+    signx = -1;
+elseif strcmpi(label_x,"r") == 1 
+    signx = 1;
+else
+    signx = 0;
+end
+
+if strcmpi(label_y,"u") == 1 
+    signy = -1;
+elseif strcmpi(label_y,"d") == 1 
+    signy = 1;
+else
+    signy = 0;
+end
+    
+%passing greyscale to the kernel
 if channels>1
 	I_gray = rgb2gray(I);
 else
