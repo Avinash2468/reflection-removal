@@ -62,9 +62,9 @@ The outputs are:
 <br>
 In this image we can clearly see that the rose is part of the reflected portion, by ghosting cues.<br>
 The fainter rose (second reflection) is to the <b>top</b> and <b>left</b> of the darker rose (first reflection).<br>
-Hence we pass `label_x` as "l" and `label_y` as "t".
+Hence we pass `label_x` as "l" and `label_y` as "u".
 
 Function call:
 ```
-deghost("../images/prova_2.png", "l", "t", 0, 0.85)
+deghost("../images/prova_2.png", "l", "u", 0, 0.85)
 ```
