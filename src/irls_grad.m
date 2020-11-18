@@ -1,4 +1,4 @@
-function out_x=irls_grad(I_x, tx, out_xi, mh, configs, mx, my,  mu, mv, mlap)
+function out_x=irls_grad(I_x, out_xi, mh, configs, mx, my,  mu, mv)
 % Solve tx = argmin  |tx|_p + |mh (I_x - tx)|_p + high_order_terms (optional)
 % Unconstrained problem
 % Support high order priors, see code

@@ -2,7 +2,7 @@ function [dx,dy] = get_dk(input_im, signx, signy, thresh)
     
      im=im2double(input_im);
 %     im = rgb2gray(im);
-    [ht,wd] = size(im);
+%     [ht,wd] = size(im);
     
     %compute the laplacian of the grayscale image
     laplacianKernel = [0 -1 0; -1 4 -1; 0 -1 0];
@@ -66,7 +66,7 @@ function [dx,dy] = get_dk(input_im, signx, signy, thresh)
 %           fprintf("%d\t%d\t%d\t%d\t%d\t%d\n",dx,dy,b,a,max_vals(i),max_vals_2(i));
 %     end
     
-    [gl_max, ind]=max(max_vals);
+    [~, ind]=max(max_vals);
     
     [dy,dx] = ind2sub([m,n],max_indices(ind));
     
@@ -76,9 +76,9 @@ function [dx,dy] = get_dk(input_im, signx, signy, thresh)
     %origin shift for the coordinates
     dx =   ((dx - ori_y));
     dy =   ((dy - ori_x));
-    
-    dx
-    dy
+%     
+%     dx
+%     dy
     if signx == 0 && signy == 0
         %do nothing
         

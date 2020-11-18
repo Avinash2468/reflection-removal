@@ -15,13 +15,12 @@ function [I_t, I_r]=grad_irls(I_in, k_mat)
   configs.non_negative = true;
   
   mk = k_mat;
- mh = inv(mk);
+  mh = inv(mk);
 
   mx = get_fx(h, w);
   my = get_fy(h, w);
   mu = get_fu(h, w);
   mv = get_fv(h, w);
-  mlap = get_lap(h, w);
 
   I_x = imfilter(I_in, [-1 1]);
   I_y = imfilter(I_in, [-1; 1]);
@@ -29,12 +28,12 @@ function [I_t, I_r]=grad_irls(I_in, k_mat)
   out_xi = I_x/2;
   out_yi = I_y/2;
 
-  out_x = irls_grad(I_x, [], out_xi, mh, configs, mx, my,  mu, mv, mlap);
+  out_x = irls_grad(I_x, out_xi, mh, configs, mx, my,  mu, mv);
 %   outr_x = reshape(mh*(I_x(:)-out_x(:)), configs.dims);
-  outr_x = reshape(mh*(I_x(:)-out_x(:)), configs.dims);
+  outr_x = reshape(mk\(I_x(:)-out_x(:)), configs.dims);
   
-  out_y = irls_grad(I_y, [], out_yi, mh, configs, mx, my, mu, mv, mlap);
-  outr_y = reshape(mh*(I_y(:)-out_y(:)), configs.dims);
+  out_y = irls_grad(I_y, out_yi, mh, configs, mx, my, mu, mv);
+  outr_y = reshape(mk\(I_y(:)-out_y(:)), configs.dims);
 
   I_t = Integration2D(out_x, out_y, I_in);
   I_r = Integration2D(outr_x, outr_y, I_in);

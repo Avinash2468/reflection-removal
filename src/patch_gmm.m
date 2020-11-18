@@ -1,4 +1,4 @@
-function [I_t, I_r ] = patch_gmm(I_in, k_mat)
+function [I_t, I_r ] = patch_gmm(I_in, k_mat, channel)
 
   % Setup for patch-based reconstruction
   h = size(I_in,1);
@@ -31,7 +31,7 @@ function [I_t, I_r ] = patch_gmm(I_in, k_mat)
   lambda = 1e6;
   
   for i = 1 : 25
-    fprintf('Optimization iteration : %d...\n', i);
+    fprintf('Optimization iteration for channel %d: %d...\n', channel, i);
 
     % Merge the patches with bounded least squares
     t_merge = merge_patches(est_t, h, w, psize);
