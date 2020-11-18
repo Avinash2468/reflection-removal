@@ -1,7 +1,7 @@
 function deghost(image_path, signx, signy, dk_thresh, ck_thresh, label)
-  addpath('epllcode');
-  addpath('lbfgsb')
-  addpath('lbfgsb/lbfgsb3.0_mex1.2');
+  addpath('epllcode'); % Dependency on Patch-GMM prior
+  addpath('lbfgsb'); 
+  addpath('lbfgsb/lbfgsb3.0_mex1.2'); % Dependency on bounded-LBFGS Optimization 
 
 I = im2double(imread(image_path));
 

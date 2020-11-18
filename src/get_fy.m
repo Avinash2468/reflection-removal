@@ -1,4 +1,5 @@
 function A=get_fy(h, w)
+  % to calculate first order constraint in vertical direction
   all_ids = reshape([1:h*w], [h w]);
 
   self_ids=all_ids;

@@ -1,4 +1,5 @@
 function A=get_fv(h, w)
+  % to calculate first order constraint in / direction
   all_ids = reshape([1:h*w], [h w]);
 
   self_ids=all_ids;

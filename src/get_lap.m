@@ -1,4 +1,5 @@
 function A=get_lap(h, w)
+  % to calculate second order constraint by Laplacian 
   all_ids = reshape([1:h*w], [h w]);
 
   self_ids=all_ids;

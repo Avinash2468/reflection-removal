@@ -3,14 +3,15 @@ function [I_t, I_r ] = patch_gmm(I_in, k_mat)
   % Setup for patch-based reconstruction
   h = size(I_in,1);
   w = size(I_in,2);
-  psize = 8;
+  psize = 8; % patch size for patch-GMM
 
   % Operator that maps an image to its ghosted version
   A = [speye(h*w, h*w) k_mat]; 
+
   num_patches = (h - psize + 1) * (w - psize + 1);
   t_merge = merge_patches(ones(psize^2, num_patches), h, w, psize);
   r_merge = merge_patches(ones(psize^2, num_patches), h, w, psize);
-  mask = cat(1, t_merge(:), r_merge(:));
+  mask = cat(1, t_merge(:), r_merge(:)); % X vertically concatenates T and R layers 
  
   % Setup for GMM prior
   load GSModel_8x8_200_2M_noDC_zeromean.mat
@@ -39,6 +40,9 @@ function [I_t, I_r ] = patch_gmm(I_in, k_mat)
     z = lambda * transpose(A) * I_in(:) + beta * sum_piT_zi;
 
     % Non-negative optimization by L-BFGSB
+    % opts.factr  Tolerance setting 
+    % opts.pgtol  Another tolerance setting, relating to norm(gradient,Inf)
+    % opts.m      Number of limited-memory vectors to use in the algorithm
     opts = struct( 'factr', 1e4, 'pgtol', 1e-8, 'm', 50);
     opts.printEvery = 50;
 
@@ -50,10 +54,13 @@ function [I_t, I_r ] = patch_gmm(I_in, k_mat)
     grad = @(x)(2*(f_handle(x) - z));
     fun = @(x)fminunc_wrapper( x, fcn, grad);
 
+    % The minimization problem that it solves is:
+    % min_x  fun (x)  subject to  l <= x <= u
     l = zeros(numel(z), 1);
     u = ones(numel(z), 1);
+    % l and u are zeros and ones because we want our optimising image to be in double range (0 <= T, R <= 1)
 
-    [out, ~, ~] = lbfgsb(fun, l, u, opts );
+    [out, ~, ~] = lbfgsb(fun, l, u, opts ); % fun has been optimized wrt I_t and I_r.
 
     out = reshape(out, h, w, 2);
     I_t = out(:,:,1);
