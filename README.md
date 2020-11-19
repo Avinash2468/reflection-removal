@@ -2,7 +2,7 @@
 
 * Avinash Prabhu - 2018102027
 * Mallika Subramanian - 2018101041
-* Fiza Husain - 20181010
+* Fiza Husain - 2018101035 
 * Tanvi Karandikar - 2018101059
 
 ## How to run the code
@@ -11,11 +11,14 @@ cd src/
 deghost(image_path, label_x, label_y, dk_thresh, ck_thresh)
 ```
 
+For an image of size 300x200, it takes <25 minutes to run on 30 CPUs of 2GB RAM each.
+It is not recommended to run this code for large images on your local system as it may cause your laptop to hang and crash.
+
 ## Inputs
 * `image_path`: Relative(wrt `src/`) or absolute path of the image to be saved. Image should be in png format.
 * `label_x`: Direction of horizontal shift (see below)
 * `label_y`: Direction of vertical shift (see below)
-* `dk_thresh`: Threshold value to be used to select which candidates for dk shift from correlation should be considered.
+* `dk_thresh`: Threshold value to be used to select which candidates from the autocorrelation should be considered for dk shift.
 * `ck_thresh`: Threshold value to be used to select which candidates are considered as patches with 'high correlation'
 
 ## Selecting label_x and label_y
@@ -23,7 +26,7 @@ deghost(image_path, label_x, label_y, dk_thresh, ck_thresh)
 In order to improve output accuracy, the user can give an input in which they specify the direction of the shift. We use shift of the second reflection wrt to the first. User is required to input their estimate of the shift direction.<br>
 First reflection is the brighter/sharper one.<br>
 
-Second is to the <label_x> of the first.
+Second reflection is to the <label_x> of the first reflection.
 | Horizontal Direction | Label x |
 | --- | --- |
 | Left | l |
@@ -32,7 +35,7 @@ Second is to the <label_x> of the first.
 <br>
 
 
-Second is to the <label_y> of the first. <br>
+Second reflection is to the <label_y> of the first reflection. <br>
 | Vertical Direction | Label y |
 | --- | --- |
 | Down | d |
@@ -62,9 +65,9 @@ The outputs are:
 <br>
 In this image we can clearly see that the rose is part of the reflected portion, by ghosting cues.<br>
 The fainter rose (second reflection) is to the <b>top</b> and <b>left</b> of the darker rose (first reflection).<br>
-Hence we pass `label_x` as "l" and `label_y` as "t".
+Hence we pass `label_x` as "l" and `label_y` as "u".
 
 Function call:
 ```
-deghost("../images/prova_2.png", "l", "t", 0, 0.85)
+deghost("../images/prova_2.png", "l", "u", 0, 0.85)
 ```
