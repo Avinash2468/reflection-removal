@@ -5,6 +5,12 @@
 * Fiza Husain - 2018101035 
 * Tanvi Karandikar - 2018101059
 
+## Matlab Toolkits Required
+
+* Image Processing Toolbox
+* Partial Differntiation Toolbox
+* Signal Processing Toolbox
+
 ## How to run the code
 ```
 cd src/
@@ -15,7 +21,7 @@ For an image of size 300x200, it takes <25 minutes to run on 30 CPUs of 2GB RAM 
 It is not recommended to run this code for large images on your local system as it may cause your laptop to hang and crash.
 
 ## Inputs
-* `image_path`: Relative(wrt `src/`) or absolute path of the image to be saved. Image should be in png format.
+* `image_path`: Relative(wrt `src/`) or absolute path of the image to be saved. Image should be in **png** format.
 * `label_x`: Direction of horizontal shift (see below)
 * `label_y`: Direction of vertical shift (see below)
 * `dk_thresh`: Threshold value to be used to select which candidates from the autocorrelation should be considered for dk shift.
